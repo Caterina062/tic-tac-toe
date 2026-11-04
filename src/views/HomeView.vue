@@ -23,7 +23,10 @@ const winner = computed(() => {
     const [a, b, c] = combination
 
     if (board.value[a] && board.value[a] === board.value[b] && board.value[a] === board.value[c]) {
-      return board.value[a]
+      return {
+        player: board.value[a],
+        cells: combination,
+      }
     }
   }
   return null
@@ -39,13 +42,23 @@ function play(index) {
 
   board.value[index] = currentPlayer.value
 
-  if (winner.value === 'X') {
-    vittorieX.value++
-  } else if (winner.value === 'O') {
-    vittorieO.value++
+  if (winner.value) {
+    if (winner.value.player === 'X') {
+      vittorieX.value++
+    } else {
+      vittorieO.value++
+    }
   } else {
     currentPlayer.value = currentPlayer.value === 'X' ? 'O' : 'X'
   }
+  /*
+  if (winner.value?.player === 'X') {
+    vittorieX.value++
+  } else if (winner.value?.player === 'O') {
+    vittorieO.value++
+  } else {
+    currentPlayer.value = currentPlayer.value === 'X' ? 'O' : 'X'
+  }*/
 }
 
 function resetGame() {
@@ -70,7 +83,7 @@ function resetGame() {
     </div>
 
     <div class="status">
-      <p v-if="winner" class="message winner">Vincitore: {{ winner }} !</p>
+      <p v-if="winner" class="message winner">Vincitore: {{ winner.player }} !</p>
       <p v-else-if="isDraw" class="message draw">Pareggio!</p>
       <p v-else class="current-player">È il turno del giocatore: {{ currentPlayer }}</p>
     </div>
@@ -80,7 +93,11 @@ function resetGame() {
         v-for="(cell, index) in board"
         :key="index"
         class="cell"
-        :class="{ 'is-x': cell === 'X', 'is-o': cell === 'O' }"
+        :class="{
+          'is-x': cell === 'X',
+          'is-o': cell === 'O',
+          'winning-cell': winner?.cells.includes(index),
+        }"
         :disabled="cell !== '' || winner || isDraw"
         @click="play(index)"
       >
@@ -108,7 +125,8 @@ function resetGame() {
   margin-top: 2rem;
 }
 
-.current-player .message {
+.current-player,
+.message {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 0.5rem;
@@ -184,5 +202,12 @@ function resetGame() {
 .vincite {
   padding: 0 0 10px 0;
   margin: 0;
+}
+
+.cell.winning-cell {
+  border: 4px solid #2f9936;
+  border-radius: 15px;
+  transform: scale(1.05);
+  transition: all 0.2s ease;
 }
 </style>
