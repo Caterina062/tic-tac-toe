@@ -29,7 +29,6 @@ const winner = computed(() => {
   return null
 })
 
-//calcolo pareggio
 const isDraw = computed(() => {
   return !winner.value && board.value.every((cell) => cell !== '')
 })
@@ -39,8 +38,12 @@ function play(index) {
   if (board.value[index] !== '' || winner.value || isDraw.value) return
 
   board.value[index] = currentPlayer.value
-  // Switch to the other player
-  if (!winner.value) {
+
+  if (winner.value === 'X') {
+    vittorieX.value++
+  } else if (winner.value === 'O') {
+    vittorieO.value++
+  } else {
     currentPlayer.value = currentPlayer.value === 'X' ? 'O' : 'X'
   }
 }
