@@ -51,14 +51,6 @@ function play(index) {
   } else {
     currentPlayer.value = currentPlayer.value === 'X' ? 'O' : 'X'
   }
-  /*
-  if (winner.value?.player === 'X') {
-    vittorieX.value++
-  } else if (winner.value?.player === 'O') {
-    vittorieO.value++
-  } else {
-    currentPlayer.value = currentPlayer.value === 'X' ? 'O' : 'X'
-  }*/
 }
 
 function resetGame() {
@@ -109,7 +101,7 @@ function resetGame() {
   </main>
 </template>
 
-<style setup>
+<style scoped>
 .container {
   display: flex;
   flex-direction: column;
